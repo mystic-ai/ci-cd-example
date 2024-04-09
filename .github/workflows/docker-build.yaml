@@ -38,4 +38,5 @@ jobs:
       - name: Push pipeline image
         run: |
           cd src/
-          poetry run pipeline container push
+          echo "PIPELINE_API_TOKEN=${PIPELINE_API_TOKEN}"
+          env PIPELINE_API_TOKEN=${{secrets.PIPELINE_API_TOKEN}} poetry run pipeline container push
