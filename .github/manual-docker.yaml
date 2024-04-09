@@ -1,0 +1,27 @@
+name: Manual docker building
+on:
+  workflow_dispatch:
+    inputs:
+      pipeline_tag:
+        description: "Pipeline tag"
+        required: true
+        default: "manual"
+run-name: "Building pipeline: ${{ github.ref_name }} -> ${{ inputs.pipeline_tag }}"
+jobs:
+  lint:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: Check formatting
+        uses: psf/black@stable
+        with:
+          version: 23.12.0
+  build-push-main-api-image:
+    if: ${{ inputs.main_api }}
+    needs:
+      - lint
+    uses: ./.github/workflows/docker-build.yaml
+    with:
+      pipelineTag: ${{ inputs.pipeline_tag }}
+    secrets:
+      PIPELINE_API_TOKEN: ${{ secrets.PIPELINE_API_TOKEN }}

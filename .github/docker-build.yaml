@@ -1,0 +1,37 @@
+name: Build and push Docker image
+on:
+  workflow_call:
+    inputs:
+      pipelineTag:
+        required: true
+        type: string
+      commitRef:
+        description: "Commit reference to checkout"
+        type: string
+        # Empty value uses the default behaviour of actions/checkout@v3.with.ref
+        default: ""
+    secrets:
+      PIPELINE_API_TOKEN:
+        required: true
+        description: The API token to authenticate with the pipeline
+jobs:
+  build-push-image:
+    runs-on: ubuntu-latest
+    env:
+      PIPELINE_API_TOKEN: { { secrets.PIPELINE_API_TOKEN } }
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          ref: ${{ inputs.commitRef }}
+      - uses: docker/setup-buildx-action@v2
+      # - name: Render image tag
+      # id: render-tag
+      # run: echo "result=${{ inputs.imageTag }}" >> $GITHUB_OUTPUT
+      - name: Setup environment
+        run: |
+          pip install -U poetry
+          poetry install
+      - name: Build pipeline
+        run: |
+          cd src/
+          pipeline container build
