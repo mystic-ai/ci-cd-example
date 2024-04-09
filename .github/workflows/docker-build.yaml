@@ -35,3 +35,7 @@ jobs:
         run: |
           cd src/
           poetry run pipeline container build
+      - name: Push pipeline image
+        run: |
+          cd src/
+          poetry run pipeline container push
