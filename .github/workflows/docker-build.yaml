@@ -34,4 +34,4 @@ jobs:
       - name: Build pipeline
         run: |
           cd src/
-          pipeline container build
+          poetry run pipeline container build
