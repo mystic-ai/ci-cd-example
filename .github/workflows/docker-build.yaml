@@ -24,9 +24,6 @@ jobs:
         with:
           ref: ${{ inputs.commitRef }}
       - uses: docker/setup-buildx-action@v2
-      # - name: Render image tag
-      # id: render-tag
-      # run: echo "result=${{ inputs.imageTag }}" >> $GITHUB_OUTPUT
       - name: Setup environment
         run: |
           pip install -U poetry
@@ -38,4 +35,4 @@ jobs:
       - name: Push pipeline image
         run: |
           cd src/
-          poetry run pipeline container push
+          poetry run pipeline container push -p paulh/random-generator:${{}} -o
