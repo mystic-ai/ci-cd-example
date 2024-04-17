@@ -35,4 +35,4 @@ jobs:
       - name: Push pipeline image
         run: |
           cd src/
-          poetry run pipeline container push -p paulh/random-generator:${{}} -o
+          poetry run pipeline container push -p paulh/random-generator:${{pipelineTag}} -o
